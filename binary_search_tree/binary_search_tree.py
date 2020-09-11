@@ -9,11 +9,15 @@ This part of the project comprises two days:
 2. Implement the `in_order_print`, `bft_print`, and `dft_print` methods
    on the BSTNode class.
 """
+from collections import deque
+
+
 class BSTNode:
     def __init__(self, value):
         self.value = value
         self.left = None
         self.right = None
+        self.level = None
 
     # Insert the given value into the tree
     def insert(self, value):
@@ -23,7 +27,7 @@ class BSTNode:
                     self.left = BSTNode(value)
                 else:
                     self.left.insert(value)
-            elif value > self.value:
+            elif value >= self.value:
                 if self.right is None:
                     self.right = BSTNode(value)
                 else:
@@ -74,17 +78,59 @@ class BSTNode:
     # Print the value of every node, starting with the given node,
     # in an iterative breadth first traversal
     def bft_print(self):
-        if self.left:
-            self.left.bft_print()
-        print( self.value),
-        if self.right:
-            self.right.bft_print()
+        self.level = 1
+        queue = deque([self])
+        output = []
+        current_level = self.level
+
+        while len(queue)>0:
+
+            current_node = queue.popleft()
+
+            if(current_node.level >= current_level):
+                output.append("\n")
+                current_level += 1
+
+            print(str(current_node.value))
+
+            if current_node.left != None:
+                current_node.left.level = current_level + 1 
+                queue.append(current_node.left)
+            
+
+
+            if current_node.right != None:
+                current_node.right.level = current_level + 1 
+                queue.append(current_node.right)
+ 
 
     # Print the value of every node, starting with the given node,
     # in an iterative depth first traversal
     def dft_print(self):
-        pass
+        self.level = 1
+        stack = deque([self])
+        current_level = self.level
 
+
+        while len(stack)>0:
+
+            current_node = stack.pop()
+
+            if(current_node.level >= current_level):
+                current_level += 1
+
+            print(str(current_node.value))
+
+            if current_node.left != None:
+                current_node.left.level = current_level + 1 
+                stack.append(current_node.left)
+            
+
+
+            if current_node.right != None:
+                current_node.right.level = current_level + 1 
+                stack.append(current_node.right)
+        
     # Stretch Goals -------------------------
     # Note: Research may be required
 
